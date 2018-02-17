@@ -36,8 +36,6 @@ package secp256k1
 #define ENABLE_MODULE_RECOVERY 1
 #define NDEBUG
 
-#define secp256k1GoPanicIllegal gocrypto_secp256k1GoPanicIllegal
-#define secp256k1GoPanicError gocrypto_secp256k1GoPanicError
 #define secp256k1_context_create gocrypto_secp256k1_context_create
 #define secp256k1_context_clone gocrypto_secp256k1_context_clone
 #define secp256k1_context_destroy gocrypto_secp256k1_context_destroy
@@ -71,8 +69,8 @@ package secp256k1
 #include "pubkey_scalar_mul.h"
 
 typedef void (*callbackFunc) (const char* msg, void* data);
-extern void secp256k1GoPanicIllegal(const char* msg, void* data);
-extern void secp256k1GoPanicError(const char* msg, void* data);
+extern void gocrypto_secp256k1GoPanicIllegal(const char* msg, void* data);
+extern void gocrypto_secp256k1GoPanicError(const char* msg, void* data);
 */
 import "C"
 
@@ -105,8 +103,8 @@ func init() {
 
 	// around 20 ms on a modern CPU.
 	context = C.secp256k1_context_create(C.SECP256K1_CONTEXT_SIGN|C.SECP256K1_CONTEXT_VERIFY)
-	C.secp256k1_context_set_illegal_callback(context, C.callbackFunc(C.secp256k1GoPanicIllegal), nil)
-	C.secp256k1_context_set_error_callback(context, C.callbackFunc(C.secp256k1GoPanicError), nil)
+	C.secp256k1_context_set_illegal_callback(context, C.callbackFunc(C.gocrypto_secp256k1GoPanicIllegal), nil)
+	C.secp256k1_context_set_error_callback(context, C.callbackFunc(C.gocrypto_secp256k1GoPanicError), nil)
 }
 
 var (
